@@ -21,9 +21,9 @@
  * If you want to disable TLS, set USETLS to false
  */
 var VERSION = '1.00';
-var BROKERHOST = 'nxn1.kube.nexpie.com';
+var BROKERHOST = 'tb7.nexpie.io';
 var BROKERPORT = '32233';
-var BROKERSECUREPORT = '888';
+var BROKERSECUREPORT = '0';
 var USETLS = true;
 
 /**
