@@ -20,7 +20,7 @@
  * Microgear-HTML5 communicates over TLS by default
  * If you want to disable TLS, set USETLS to false
  */
-var VERSION = '1.00';
+// var VERSION = '1.00';
 var BROKERHOST = 'tb7.nexpie.io';
 var BROKERPORT = '32233';
 var BROKERSECUREPORT = '0';

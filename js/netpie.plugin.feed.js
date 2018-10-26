@@ -13,7 +13,6 @@ if (typeof dsstore === "undefined") {
         "display_name": "NETPIE Feed",
         "description" : "NETPIE Feed Datasource.",
         "external_scripts" : [
-            "https://cdn.netpie.io/microgear.js"
         ],
         "settings"    : [
             {
