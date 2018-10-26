@@ -3074,41 +3074,56 @@ console.log({mqttclientid, mqttusername , x:self.securemode , wsport});
 		var plen = self.appid.length +1;
 		var rtop = topic.substr(plen,topic.length-plen);
 
-		if (rtop.substr(0,2)=='/&') {
-			var p = (rtop.substr(1,rtop.length-1)+'/').indexOf('/');
-			var ctop = rtop.substr(2,p);
-			switch (ctop) {
-                case 'present' :
-                case 'absent'  :
-                            var pm;
-                            try {
-                                pm = JSON.parse(message.toString());
-                            }
-                            catch(e) {
-                                pm = message.toString();
-                            }
-                        self.emit(ctop, pm);
-                        break;
-                case 'resetendpoint' :
-	                        if (self.accesstoken && self.accesstoken.endpoint) {
-	                            self.accesstoken.endpoint = "";
-								storage.set("microgear."+self.gearkey+".accesstoken", JSON.stringify(self.accesstoken));
-	                            self.emit('info','endpoint reset');
-	                        }
-	                        break;
-			}
-		}
-		else if (topic.substr(0,1)=='@') {
-			switch (topic) {
-				case '@info' : 	self.emit('info',message);
-								break;
-				case '@error' : self.emit('error',message);
-								break;
-			}
-		}
-		else {
-			self.emit('message',topic,message);
-		}
+
+console.log('mesage arrive ---');
+console.log(msg);
+
+		let ctop = topic.split('/');
+		switch(ctop[0]) {
+			case '@shadow' : 	let out = JSON.parse(message);
+			                    self.emit('message',topic,out);
+                                break;
+            case '@msg'  :      self.emit('message',topic,message);
+                                break;
+        }
+
+//    	self.emit('message',topic,message);
+
+		// if (rtop.substr(0,2)=='/&') {
+		// 	var p = (rtop.substr(1,rtop.length-1)+'/').indexOf('/');
+		// 	var ctop = rtop.substr(2,p);
+		// 	switch (ctop) {
+  //               case 'present' :
+  //               case 'absent'  :
+  //                           var pm;
+  //                           try {
+  //                               pm = JSON.parse(message.toString());
+  //                           }
+  //                           catch(e) {
+  //                               pm = message.toString();
+  //                           }
+  //                       self.emit(ctop, pm);
+  //                       break;
+  //               case 'resetendpoint' :
+	 //                        if (self.accesstoken && self.accesstoken.endpoint) {
+	 //                            self.accesstoken.endpoint = "";
+		// 						storage.set("microgear."+self.gearkey+".accesstoken", JSON.stringify(self.accesstoken));
+	 //                            self.emit('info','endpoint reset');
+	 //                        }
+	 //                        break;
+		// 	}
+		// }
+		// else if (topic.substr(0,1)=='@') {
+		// 	switch (topic) {
+		// 		case '@info' : 	self.emit('info',message);
+		// 						break;
+		// 		case '@error' : self.emit('error',message);
+		// 						break;
+		// 	}
+		// }
+		// else {
+		// 	self.emit('message',topic,message);
+		// }
 	}
 
 	function _onConnectionLost(responseObject) {
@@ -3145,6 +3160,7 @@ console.log({mqttclientid, mqttusername , x:self.securemode , wsport});
 //				self.client.subscribe('/'+self.appid+topic,{
 				self.client.subscribe(topic,{
 					onSuccess : function(res) {
+//console.log(topic+' -- subscribed');
 						if (self.subscriptions.indexOf(topic) < 0) {
 							self.subscriptions.push(topic);
 						}
