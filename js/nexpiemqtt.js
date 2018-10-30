@@ -20,7 +20,7 @@
  * Microgear-HTML5 communicates over TLS by default
  * If you want to disable TLS, set USETLS to false
  */
-// var VERSION = '1.00';
+var VERSION = '1.00';
 var BROKERHOST = 'tb7.nexpie.io';
 var BROKERPORT = '32233';
 var BROKERSECUREPORT = '0';
@@ -3074,56 +3074,18 @@ console.log({mqttclientid, mqttusername , x:self.securemode , wsport});
 		var plen = self.appid.length +1;
 		var rtop = topic.substr(plen,topic.length-plen);
 
-
-console.log('mesage arrive ---');
-console.log(msg);
-
 		let ctop = topic.split('/');
 		switch(ctop[0]) {
-			case '@shadow' : 	let out = JSON.parse(message);
-			                    self.emit('message',topic,out);
-                                break;
-            case '@msg'  :      self.emit('message',topic,message);
-                                break;
+            // case '@shadow' :    let out = JSON.parse(message);
+            //                     self.emit('message',topic,out);
+            //                     break;
+            // case '@msg'  :      self.emit('message',topic,message);
+            //                     break;
+            default  :     self.emit('message',topic,message);
+                           break;
+
         }
-
-//    	self.emit('message',topic,message);
-
-		// if (rtop.substr(0,2)=='/&') {
-		// 	var p = (rtop.substr(1,rtop.length-1)+'/').indexOf('/');
-		// 	var ctop = rtop.substr(2,p);
-		// 	switch (ctop) {
-  //               case 'present' :
-  //               case 'absent'  :
-  //                           var pm;
-  //                           try {
-  //                               pm = JSON.parse(message.toString());
-  //                           }
-  //                           catch(e) {
-  //                               pm = message.toString();
-  //                           }
-  //                       self.emit(ctop, pm);
-  //                       break;
-  //               case 'resetendpoint' :
-	 //                        if (self.accesstoken && self.accesstoken.endpoint) {
-	 //                            self.accesstoken.endpoint = "";
-		// 						storage.set("microgear."+self.gearkey+".accesstoken", JSON.stringify(self.accesstoken));
-	 //                            self.emit('info','endpoint reset');
-	 //                        }
-	 //                        break;
-		// 	}
-		// }
-		// else if (topic.substr(0,1)=='@') {
-		// 	switch (topic) {
-		// 		case '@info' : 	self.emit('info',message);
-		// 						break;
-		// 		case '@error' : self.emit('error',message);
-		// 						break;
-		// 	}
-		// }
-		// else {
-		// 	self.emit('message',topic,message);
-		// }
+	
 	}
 
 	function _onConnectionLost(responseObject) {
@@ -3140,7 +3102,7 @@ console.log(msg);
 			}
 		}
 	}
-	setInterval(monloop,MONLOOPINTERVAL);
+	setInterval(monloop,MONLOOPINTERVAL);	
 
 	_microgear.prototype.connect = function(_appid, done) {
 		this.onlinemode = true;
@@ -3160,7 +3122,6 @@ console.log(msg);
 //				self.client.subscribe('/'+self.appid+topic,{
 				self.client.subscribe(topic,{
 					onSuccess : function(res) {
-//console.log(topic+' -- subscribed');
 						if (self.subscriptions.indexOf(topic) < 0) {
 							self.subscriptions.push(topic);
 						}
