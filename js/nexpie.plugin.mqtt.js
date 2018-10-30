@@ -129,44 +129,118 @@ if (typeof microgear === "undefined") {
         
         microgear[settings.name] = self.mg;
 
+
         self.mg.on('message', function(topic,msg) {
+
+            function topcmp(pattern, intopic, opt) {
+                let p = pattern.split('/');
+                let t = intopic.split('/');
+
+                let matched = true;
+                let split_intopic = t;
+                for (let i=0; i<p.length; i++) {
+                    if (p[i] != t[i]) {
+                        matched = false;
+                        split_intopic = [];
+                        break;
+                    }
+                }
+                if (matched) return split_intopic;
+                else return null;
+            }
+
             if (topic && msg) {
                 let obj = null;
-                switch (topic) {
-                    case '@shadow/changed' :
-                            if (typeof(data['#shadow']) == 'undefined') {
-                                data['#shadow'] = {};
-                            }
-                            try {
-                                obj = JSON.parse(msg);
-                            }
-                            catch(e) {
-                            }
-                            if (typeof(obj)=='object') {
-                                if (obj.event == 'merged') {
-                                    let m = {
-                                      ...data['#shadow'],
-                                      ...obj.value
-                                    };
-                                    data['#shadow'] = m;
-                                }
-                                else {
-                                    data['#shadow'] = obj.value;
-                                }
-                            }
-                            break;
-                    case '@private/shadow/get' :
-                            try {
-                                obj = JSON.parse(msg);
-                            }
-                            catch(e) {
-                            }
-                            if (typeof(obj)=='object') {
-                                data['#shadow'] = obj.value;
-                            }
 
-                            break;
+
+                if (sp = topcmp('@shadow/changed', topic, {})){
+                    let dskey = '#shadow'+(sp[2]?'/'+sp[2]:'');
+                    if (typeof(data[dskey]) == 'undefined') {
+                        data[dskey] = {};
+                    }
+                    try {
+                        obj = JSON.parse(msg);
+                    }
+                    catch(e) {
+                    }
+                    if (typeof(obj)=='object') {
+                        if (obj.event == 'merged') {
+                            let m = {
+                              ...data[dskey],
+                              ...obj.value
+                            };
+                            data[dskey] = m;
+                        }
+                        else {
+                            data[dskey] = obj.value;
+                        }
+                    }
                 }
+                else if (sp = topcmp('@private/shadow/get', topic, {})){
+                    let dskey = '#shadow'+(sp[3]?'/'+sp[3]:'');
+                    if (typeof(data[dskey]) == 'undefined') {
+                        data[dskey] = {};
+                    }
+                    try {
+                        obj = JSON.parse(msg);
+                    }
+                    catch(e) {
+                    }
+                    if (typeof(obj)=='object') {
+                        data[dskey] = obj.value;
+                    }
+                }
+                else if (sp = topcmp('@private/shadow/read', topic, {})){
+                    let dskey = '#shadow'+(sp[3]?'/'+sp[3]:'');
+                    if (typeof(data[dskey]) == 'undefined') {
+                        data[dskey] = {};
+                    }
+                    try {
+                        obj = JSON.parse(msg);
+                    }
+                    catch(e) {
+                    }
+                    if (typeof(obj)=='object') {
+                        data[dskey] = obj.value;
+                    }
+                }
+
+
+                // switch (topic) {
+                //     case '@shadow/changed' :
+                //             if (typeof(data['#shadow']) == 'undefined') {
+                //                 data['#shadow'] = {};
+                //             }
+                //             try {
+                //                 obj = JSON.parse(msg);
+                //             }
+                //             catch(e) {
+                //             }
+                //             if (typeof(obj)=='object') {
+                //                 if (obj.event == 'merged') {
+                //                     let m = {
+                //                       ...data['#shadow'],
+                //                       ...obj.value
+                //                     };
+                //                     data['#shadow'] = m;
+                //                 }
+                //                 else {
+                //                     data['#shadow'] = obj.value;
+                //                 }
+                //             }
+                //             break;
+                //     case '@private/shadow/get' :
+                //             try {
+                //                 obj = JSON.parse(msg);
+                //             }
+                //             catch(e) {
+                //             }
+                //             if (typeof(obj)=='object') {
+                //                 data['#shadow'] = obj.value;
+                //             }
+
+                //             break;
+                // }
 
                 updateCallback(data);
             }

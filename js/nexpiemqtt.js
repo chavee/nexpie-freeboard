@@ -2966,7 +2966,7 @@ Microgear.create = function(param) {
 		if (self.securemode) wsport = BROKERSECUREPORT;
 		else wsport = BROKERPORT;
 
-console.log({mqttclientid, mqttusername , x:self.securemode , wsport});
+//console.log({mqttclientid, mqttusername , x:self.securemode , wsport});
 
 //		self.client = new Paho.MQTT.Client(b[0], Number(wsport), self.accesstoken.token);
 		self.client = new Paho.MQTT.Client(BROKERHOST, Number(wsport), mqttclientid);
@@ -2983,8 +2983,7 @@ console.log({mqttclientid, mqttusername , x:self.securemode , wsport});
 
 		state = 3;
 		self.brokerconnect(function(res) {
-			console.log(res);
-			console.log('hhhh');
+
 		});
 
 
@@ -3073,8 +3072,8 @@ console.log({mqttclientid, mqttusername , x:self.securemode , wsport});
 		var message = msg.payloadString;
 		var plen = self.appid.length +1;
 		var rtop = topic.substr(plen,topic.length-plen);
-
 		let ctop = topic.split('/');
+
 		switch(ctop[0]) {
             // case '@shadow' :    let out = JSON.parse(message);
             //                     self.emit('message',topic,out);
