@@ -131,7 +131,33 @@ if (typeof microgear === "undefined") {
 
         self.mg.on('message', function(topic,msg) {
             if (topic && msg) {
-                data[topic] = msg;
+                switch (topic) {
+                    case '@shadow/changed' :
+                            if (typeof(data['#shadow']) == 'undefined') {
+                                data['#shadow'] = {};
+                            }
+                            let obj =null;
+                            if (typeof(msg)=='string') {
+                                try {
+                                    obj = JSON.parse(msg);
+                                }
+                                catch(e) {
+                                }
+                            }
+                            if (typeof(obj)=='object') {
+                                if (obj.event == 'merged') {
+                                    let m = {
+                                      ...data['#shadow'],
+                                      ...obj.value
+                                    };
+                                    data['#shadow'] = m;
+                                }
+                                else {
+                                    data['#shadow'] = obj.value;
+                                }
+                            }
+                }
+
                 updateCallback(data);
             }
         });
