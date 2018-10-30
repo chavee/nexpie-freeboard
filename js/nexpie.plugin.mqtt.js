@@ -131,18 +131,16 @@ if (typeof microgear === "undefined") {
 
         self.mg.on('message', function(topic,msg) {
             if (topic && msg) {
+                let obj = null;
                 switch (topic) {
                     case '@shadow/changed' :
                             if (typeof(data['#shadow']) == 'undefined') {
                                 data['#shadow'] = {};
                             }
-                            let obj =null;
-                            if (typeof(msg)=='string') {
-                                try {
-                                    obj = JSON.parse(msg);
-                                }
-                                catch(e) {
-                                }
+                            try {
+                                obj = JSON.parse(msg);
+                            }
+                            catch(e) {
                             }
                             if (typeof(obj)=='object') {
                                 if (obj.event == 'merged') {
@@ -156,6 +154,18 @@ if (typeof microgear === "undefined") {
                                     data['#shadow'] = obj.value;
                                 }
                             }
+                            break;
+                    case '@private/shadow/get' :
+                            try {
+                                obj = JSON.parse(msg);
+                            }
+                            catch(e) {
+                            }
+                            if (typeof(obj)=='object') {
+                                data['#shadow'] = obj.value;
+                            }
+
+                            break;
                 }
 
                 updateCallback(data);
