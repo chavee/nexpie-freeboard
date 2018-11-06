@@ -20,32 +20,7 @@
  * Microgear-HTML5 communicates over TLS by default
  * If you want to disable TLS, set USETLS to false
  */
-var VERSION = '1.00';
-var BROKERHOST = 'tb7.nexpie.io';
-var BROKERPORT = '32233';
-var BROKERSECUREPORT = '0';
-var USETLS = true;
 
-/**
- * Microgear API version
- */
-var MGREV = 'WJS1b';
-
-/**
- * Constants
- */
-var MINTOKDELAYTIME = 100;
-var MAXTOKDELAYTIME = 30000;
-var DEBUGMODE = false;
-var MONLOOPINTERVAL = 1000;
-var RETRYCONNECTIONINTERVAL = 5000;
-var MESSAGEBUFFERSIZE = 20;
-
-/**
- * Variables
- */
-var toktime = MINTOKDELAYTIME;
-var GEARAUTH = BROKERHOST;
 
 /*
 Store.js
@@ -2715,6 +2690,35 @@ if (typeof Microgear === "undefined") {
 }
 
 Microgear.create = function(param) {
+
+	var VERSION = '1.00';
+	var BROKERHOST = 'tb7.nexpie.io';
+	var BROKERPORT = '32233';
+	var BROKERSECUREPORT = '0';
+	var USETLS = false;
+
+	/**
+	 * Microgear API version
+	 */
+	var MGREV = 'WJS1b';
+
+	/**
+	 * Constants
+	 */
+	var MINTOKDELAYTIME = 100;
+	var MAXTOKDELAYTIME = 30000;
+	var DEBUGMODE = false;
+	var MONLOOPINTERVAL = 1000;
+	var RETRYCONNECTIONINTERVAL = 5000;
+	var MESSAGEBUFFERSIZE = 20;
+
+	/**
+	 * Variables
+	 */
+	var toktime = MINTOKDELAYTIME;
+	var GEARAUTH = BROKERHOST;
+
+
     var gkey = param.key || param.gearkey || "";
 	var gsecret = param.secret || param.gearsecret || "";
     var galias = param.alias || param.gearalias || "";
